@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Writing: Figurative Language Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap');
+
+  :root {
+    --bg: #f5f0e8;
+    --card: #fffdf8;
+    --border: #d6cdb8;
+    --text: #2c2416;
+    --muted: #7a6f5e;
+    --accent: #4a3728;
+    --correct: #2d6a4f;
+    --correct-bg: #d8f3dc;
+    --correct-border: #52b788;
+    --wrong: #9b2226;
+    --wrong-bg: #ffe0e0;
+    --wrong-border: #e76f51;
+    --highlight: #e9c46a;
+    --section-a: #3d405b;
+    --section-b: #5c4033;
+    --section-c: #2d6a4f;
+    --section-d: #7b2d8b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(233,196,106,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(74,55,40,0.07) 0%, transparent 50%);
+    font-family: 'Source Serif 4', Georgia, serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  header {
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--border);
+    position: relative;
+  }
+
+  header::after {
+    content: '✦';
+    position: absolute;
+    bottom: -0.7rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    padding: 0 0.75rem;
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+    font-weight: 300;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--accent);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .instruction {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.8rem;
+  }
+
+  /* Score bar */
+  #score-bar {
+    max-width: 780px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  #score-bar .score-label { font-weight: 300; font-style: italic; }
+  #score-display { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent); margin-left: auto; }
+  #progress-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--correct), #52b788); border-radius: 999px; transition: width 0.4s ease; }
+
+  /* Section headers */
+  .section-header {
+    max-width: 780px;
+    margin: 2.5rem auto 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    color: white;
+    background: var(--accent);
+    padding: 0.3rem 0.9rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .section-header .section-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Question card */
+  .question-card {
+    max-width: 780px;
+    margin: 0 auto 1.25rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .question-card:hover { box-shadow: 0 4px 18px rgba(74,55,40,0.1); }
+
+  .question-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.1rem 1.25rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .q-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    min-width: 2rem;
+    padding-top: 0.05rem;
+    opacity: 0.6;
+  }
+
+  .q-text {
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .q-text em { font-style: italic; color: var(--accent); }
+
+  /* Options grid */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.5rem;
+    padding: 0.85rem 1.25rem;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.8rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+    background: transparent;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.88rem;
+    color: var(--text);
+    text-align: left;
+  }
+
+  .option:hover:not(.answered) {
+    border-color: var(--accent);
+    background: rgba(74,55,40,0.05);
+    transform: translateY(-1px);
+  }
+
+  .option .opt-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    min-width: 1.1rem;
+  }
+
+  .option.correct {
+    background: var(--correct-bg);
+    border-color: var(--correct-border);
+    color: var(--correct);
+  }
+
+  .option.correct .opt-letter { color: var(--correct); }
+
+  .option.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--wrong-border);
+    color: var(--wrong);
+  }
+
+  .option.wrong .opt-letter { color: var(--wrong); }
+
+  .option.revealed-correct {
+    background: rgba(216,243,220,0.35);
+    border-color: var(--correct-border);
+    color: var(--correct);
+    opacity: 0.75;
+  }
+
+  .option.disabled { pointer-events: none; }
+
+  /* Explanation box */
+  .explanation {
+    display: none;
+    margin: 0 1.25rem 1rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #fef9ee, #fff8e7);
+    border-left: 3px solid var(--highlight);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.86rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .explanation.show { display: block; animation: fadeIn 0.3s ease; }
+  .explanation strong { color: var(--accent); }
+
+  .answer-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff8e0;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.78rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    margin-right: 0.4rem;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-correct {
+    0%,100% { box-shadow: 0 0 0 0 rgba(45,106,79,0); }
+    50% { box-shadow: 0 0 0 6px rgba(45,106,79,0.2); }
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-5px); }
+    40%,80% { transform: translateX(5px); }
+  }
+
+  .option.correct { animation: pulse-correct 0.6s ease; }
+  .option.wrong { animation: shake 0.4s ease; }
+
+  /* Results summary */
+  #results-banner {
+    display: none;
+    max-width: 780px;
+    margin: 3rem auto 1rem;
+    text-align: center;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  #results-banner h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  #results-banner p { color: var(--muted); font-style: italic; }
+  #final-score { font-size: 3rem; font-family: 'Playfair Display', serif; color: var(--accent); margin: 1rem 0 0.5rem; }
+
+  footer {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="subtitle">Final Test · Literary Tropes &amp; Schemes</p>
+  <h1>Creative Writing:<br>Figurative Language</h1>
+  <p class="instruction">Double-click any option to submit your answer.</p>
+</header>
+
+<div id="score-bar">
+  <span class="score-label">Progress</span>
+  <div id="progress-wrap"><div id="progress-fill"></div></div>
+  <span id="score-display">0 / 40</span>
+</div>
+
+<div id="quiz-container"></div>
+
+<div id="results-banner">
+  <h3>Quiz Complete!</h3>
+  <div id="final-score"></div>
+  <p id="final-msg"></p>
+</div>
+
+<footer>Double-click an option to check your answer · Green = Correct · Red = Incorrect</footer>
+
+<script>
+// ─── Answer Key ───────────────────────────────────────────────────────────────
+const ANSWERS = {
+  1:"D",2:"B",3:"D",4:"H",5:"G",6:"J",7:"A",8:"E",9:"C",10:"D",
+  11:"A",12:"A",13:"B",14:"F",15:"A",16:"B",17:"K",18:"G",19:"G",20:"H",
+  21:"A",22:"B",23:"A",24:"H",25:"A",26:"H",27:"H",28:"F",29:"E",30:"G",
+  31:"F",32:"B",33:"A",34:"J",35:"D",36:"J",37:"D",38:"D",39:"G",40:"J"
+};
+
+// ─── Explanations ─────────────────────────────────────────────────────────────
+const EXPLANATIONS = {
+  1:"<span class='answer-badge'>Antanagoge</span> acknowledges a negative point then immediately counters it with a positive — Andy is late, <em>but</em> he's proficient.",
+  2:"<span class='answer-badge'>Adhortatio</span> is an exhortation or encouraging advice. The saying urges optimism in adversity.",
+  3:"<span class='answer-badge'>Antanagoge</span> balances a negative ('worst') against a positive ('best'), countering one idea with another.",
+  4:"<span class='answer-badge'>Categoria</span> is a direct, pointed accusation — Zola explicitly charges Billot with wrongdoing.",
+  5:"<span class='answer-badge'>Catachresis</span> applies a word in an unusual or strained way — here 'looks' is used to mean appearance/presence rather than the act of seeing.",
+  6:"<span class='answer-badge'>Correctio</span> replaces or refines a word just used — 'restaurant' is self-corrected to the more apt 'experience'.",
+  7:"<span class='answer-badge'>Accismus</span> is feigned indifference to something one actually desires — the fox pretends not to want the grapes.",
+  8:"<span class='answer-badge'>Antiphrasis</span> uses a word in a sense opposite to its meaning — calling a small dog a 'giant' is ironic.",
+  9:"<span class='answer-badge'>Antanaclasis</span> repeats a word but shifts its meaning — 'hang together' (unity) vs. 'hang separately' (execution).",
+  10:"<span class='answer-badge'>Antanagoge</span> concedes an economic negative but counters it with the positive of saving lives.",
+  11:"<span class='answer-badge'>Dehortatio</span> is advice against an action or a warning — 'Never look a gift horse in the mouth' cautions against ingratitude.",
+  12:"<span class='answer-badge'>Adhortatio</span> is enthusiastic encouragement to act boldly, as Hazlitt urges here.",
+  13:"<span class='answer-badge'>Distinctio</span> clarifies a term's precise meaning immediately after using it — 'recess, by recess I mean…'",
+  14:"<span class='answer-badge'>Exuscitatio</span> is a passionate appeal that stirs emotion ('Doth it not abhor you…'), rousing the audience.",
+  15:"<span class='answer-badge'>Dehortatio</span> — Franklin advises restraint, warning against saying the wrong thing.",
+  16:"<span class='answer-badge'>Distinctio</span> defines 'user interface' right after mentioning it — 'by user interface, I mean…'",
+  17:"<span class='answer-badge'>Zeugma</span> yokes one verb ('lose') to grammatically or semantically unlike objects: keys, a game, patience.",
+  18:"<span class='answer-badge'>Hypophora</span> poses a question and immediately answers it — a classic rhetorical self-Q&A.",
+  19:"<span class='answer-badge'>Merism</span> refers to a whole by naming its contrasting parts — 'young and old' encompasses everyone.",
+  20:"<span class='answer-badge'>Optatio</span> expresses a wish or prayer — 'I would the immortal Gods had granted…'",
+  21:"<span class='answer-badge'>Anaphora</span> repeats 'Cease from' at the start of successive clauses.",
+  22:"<span class='answer-badge'>Anadiplosis</span> ends one clause with a word ('thought pattern') that begins the next.",
+  23:"<span class='answer-badge'>Anaphora</span> repeats 'Reach out' at the start of each clause.",
+  24:"<span class='answer-badge'>Diacope</span> repeats a word or phrase with only a few words intervening — 'good man… good man'.",
+  25:"<span class='answer-badge'>Anaphora</span> — 'I'm' begins three successive frustrated declarations.",
+  26:"<span class='answer-badge'>Diacope</span> — 'day' is separated by 'by dragging' and then repeated, emphasising slow passage.",
+  27:"<span class='answer-badge'>Diacope</span> — 'love' is repeated with 'with all your heart' intervening.",
+  28:"<span class='answer-badge'>Anthimeria</span> converts a noun ('Movie') into a verb — 'Let's Movie'.",
+  29:"<span class='answer-badge'>Antimetabole</span> reverses the key terms: 'mind on my money / money on my mind'.",
+  30:"<span class='answer-badge'>Chiasmus</span> inverts the grammatical structure — 'walked tiredly' (verb+adverb) becomes 'drowsily, we ambled' (adverb+verb).",
+  31:"<span class='answer-badge'>Aphaeresis</span> drops a syllable from the beginning of a word — 'lone' from 'a<em>lone</em>'.",
+  32:"<span class='answer-badge'>Isocolon</span> uses parallel clauses of equal length and structure — 'For want of a nail… For want of a shoe…'",
+  33:"<span class='answer-badge'>Epizeuxis</span> repeats a word immediately with no other words between — 'I won't! I won't! I won't!'",
+  34:"<span class='answer-badge'>Epenthesis</span> inserts an extra sound within a word — 'ath-a-lete', 'fam-b-ily'.",
+  35:"<span class='answer-badge'>Tautology</span> — 'adequate' already means sufficient; 'enough' adds nothing new.",
+  36:"<span class='answer-badge'>Paragoge</span> adds a sound or syllable to the end of a word — 'film-um' → 'fillum'.",
+  37:"<span class='answer-badge'>Tautology</span> — '2 p.m.' already means afternoon; 'in the afternoon' is redundant.",
+  38:"<span class='answer-badge'>Synonymia</span> heaps up synonyms ('arrogancy… envy… depraving, slandering, defacing') to amplify a single idea.",
+  39:"<span class='answer-badge'>Syncope</span> omits a sound or syllable from the middle of a word — cam'ra, fam'ly, etc.",
+  40:"<span class='answer-badge'>Epenthesis</span> inserts an extra sound within a word — 'buh-lue' for 'blue', 'su-pas-ghetti' for 'spaghetti'."
+};
+
+// ─── Questions data ───────────────────────────────────────────────────────────
+const QUESTIONS = [
+  {
+    id:1, text:`Andy is a good lad, given the fact that he resumes late to work, he's also very proficient in his expertise.`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:2, text:`"When life gives you lemons, make lemonade."`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:3, text:`Hope for the best; prepare for the worst.`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:4, text:`"I accuse General Billot of having held in his hands absolute proof of Dreyfus's innocence..." — Emile Zola`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:5, text:`"But what may I, fair virgin, call your name, Whose looks set forth no mortal form to view..."`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:6, text:`Kreuz Market is the ultimate barbecue restaurant—no, scratch that—barbecue experience in Central Texas.`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:7, text:`The fox's dismissal of the grapes in Aesop's fable of the fox and the grapes is an example of accismus.`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:8, text:`The comedian employed __________, using the term 'giant' to describe his petite canine companion.`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:9, text:`Ben Franklin: "We must all hang together or most assuredly we shall all hang separately."`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:10, text:`Those in favour of a lockdown acknowledge that it will cause economic hardship but that we will save lives...`,
+    opts:[["A","Accismus"],["B","Adhortatio"],["C","Antanaclasis"],["D","Antanagoge"],["E","Antiphrasis"],["F","Antithesis"],["G","Catachresis"],["H","Categoria"],["I","Comprobatio"],["J","Correctio"]]
+  },
+  {
+    id:11, text:`"Never look a gift horse in the mouth."`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:12, text:`"Look up, laugh loud, talk big, keep the color in your cheek and the fire in your eye..." — William Hazlitt`,
+    opts:[["A","Adhortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:13, text:`"I think at this point... it is important we take a recess—by recess, I mean taking a short break..."`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:14, text:`"Doth it not abhor you to hear... he were most worthy to be extirpated."`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:15, text:`"Remember not only to say the right thing... but far more difficult still, to leave unsaid the wrong thing..." — Benjamin Franklin`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:16, text:`"The device is excellent, particularly its user interface. By user interface, I mean its ease of accessibility..."`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:17, text:`One can lose a pair of car keys, a game, or one's patience.`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:18, text:`"What's the benefit of completing the optional exercises? They will help you study."`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:19, text:`"Young and old"`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Merism"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:20, text:`"I would the immortal Gods had granted that we might rather have given thanks to Servius Sulpitius being alive..."`,
+    opts:[["A","Dehortatio"],["B","Distinctio"],["C","Dirimens Copulatio"],["D","Dysphemism"],["E","Effictio"],["F","Exuscitatio"],["G","Hypophora"],["H","Optatio"],["I","Periphrasis"],["J","Tricolon"],["K","Zeugma"]]
+  },
+  {
+    id:21, text:`"What if you thought of it as the Jews consider the Sabbath — Cease from travel. Cease from buying and selling."`,
+    opts:[["A","Anaphora"],["B","Anadiplosis"],["C","Anti-climax"],["D","Antimetabole"],["E","Anthimeria"],["F","Chiasmus"],["G","Climax"],["H","Diacope"],["I","Epiphora"]]
+  },
+  {
+    id:22, text:`"Once you change your philosophy, you change your thought pattern. Once you change your thought pattern, you change your attitude..."`,
+    opts:[["A","Anaphora"],["B","Anadiplosis"],["C","Anti-climax"],["D","Antimetabole"],["E","Anthimeria"],["F","Chiasmus"],["G","Climax"],["H","Diacope"],["I","Epiphora"]]
+  },
+  {
+    id:23, text:`"Reach out your heart. Reach out your words. Reach out all the tendrils of compassion..."`,
+    opts:[["A","Anaphora"],["B","Anadiplosis"],["C","Anti-climax"],["D","Antimetabole"],["E","Anthimeria"],["F","Chiasmus"],["G","Climax"],["H","Diacope"],["I","Epiphora"]]
+  },
+  {
+    id:24, text:`"He's a good man! What a good man!"`,
+    opts:[["A","Anaphora"],["B","Anadiplosis"],["C","Anti-climax"],["D","Antimetabole"],["E","Anthimeria"],["F","Chiasmus"],["G","Climax"],["H","Diacope"],["I","Epiphora"]]
+  },
+  {
+    id:25, text:`Last week, he was just fine. Yesterday, he was just fine... I'm tired of this job. I'm over this job. I'm done with this job!`,
+    opts:[["A","Anaphora"],["B","Anadiplosis"],["C","Anti-climax"],["D","Antimetabole"],["E","Anthimeria"],["F","Chiasmus"],["G","Climax"],["H","Diacope"],["I","Epiphora"]]
+  },
+  {
+    id:26, text:`Minute by minute, day by dragging day,`,
+    opts:[["A","Anaphora"],["B","Anadiplosis"],["C","Anti-climax"],["D","Antimetabole"],["E","Anthimeria"],["F","Chiasmus"],["G","Climax"],["H","Diacope"],["I","Epiphora"]]
+  },
+  {
+    id:27, text:`"When you love, love with all your heart."`,
+    opts:[["A","Anaphora"],["B","Anadiplosis"],["C","Anti-climax"],["D","Antimetabole"],["E","Anthimeria"],["F","Chiasmus"],["G","Climax"],["H","Diacope"],["I","Epiphora"]]
+  },
+  {
+    id:28, text:`"Let's Movie"`,
+    opts:[["A","Adnomination"],["B","Anaphora"],["C","Anadiplosis"],["D","Anti-climax"],["E","Antimetabole"],["F","Anthimeria"],["G","Chiasmus"],["H","Climax"],["I","Diacope"],["J","Epiphora"]]
+  },
+  {
+    id:29, text:`"With my mind on my money and my money on my mind."`,
+    opts:[["A","Adnomination"],["B","Anaphora"],["C","Anadiplosis"],["D","Anti-climax"],["E","Antimetabole"],["F","Anthimeria"],["G","Chiasmus"],["H","Climax"],["I","Diacope"],["J","Epiphora"]]
+  },
+  {
+    id:30, text:`We walked tiredly; drowsily, we ambled along toward the hotel.`,
+    opts:[["A","Adnomination"],["B","Anaphora"],["C","Anadiplosis"],["D","Anti-climax"],["E","Antimetabole"],["F","Anthimeria"],["G","Chiasmus"],["H","Climax"],["I","Diacope"],["J","Epiphora"]]
+  },
+  {
+    id:31, text:`"lone" from "alone"`,
+    opts:[["A","Epizeuxis"],["B","Isocolon"],["C","Symploce"],["D","Synonymia"],["E","Tautology"],["F","Aphaeresis"],["G","Syncope"],["H","Apocope"],["I","Prothesis"],["J","Epenthesis"],["K","Paragoge"]]
+  },
+  {
+    id:32, text:`"For want of a nail the shoe was lost. For want of a shoe the horse was lost..."`,
+    opts:[["A","Epizeuxis"],["B","Isocolon"],["C","Symploce"],["D","Synonymia"],["E","Tautology"],["F","Aphaeresis"],["G","Syncope"],["H","Apocope"],["I","Prothesis"],["J","Epenthesis"],["K","Paragoge"]]
+  },
+  {
+    id:33, text:`"Threaten me all you want, I won't do it. I won't! I won't! I won't!"`,
+    opts:[["A","Epizeuxis"],["B","Isocolon"],["C","Symploce"],["D","Synonymia"],["E","Tautology"],["F","Aphaeresis"],["G","Syncope"],["H","Apocope"],["I","Prothesis"],["J","Epenthesis"],["K","Paragoge"]]
+  },
+  {
+    id:34, text:`athalete and fambily`,
+    opts:[["A","Epizeuxis"],["B","Isocolon"],["C","Symploce"],["D","Synonymia"],["E","Tautology"],["F","Aphaeresis"],["G","Syncope"],["H","Apocope"],["I","Prothesis"],["J","Epenthesis"],["K","Paragoge"]]
+  },
+  {
+    id:35, text:`The hotel room wasn't great, but it was adequate enough.`,
+    opts:[["A","Epizeuxis"],["B","Symploce"],["C","Synonymia"],["D","Tautology"],["E","Aphaeresis"],["F","Syncope"],["G","Apocope"],["H","Prothesis"],["I","Epenthesis"],["J","Paragoge"]]
+  },
+  {
+    id:36, text:`fillum for film`,
+    opts:[["A","Epizeuxis"],["B","Symploce"],["C","Synonymia"],["D","Tautology"],["E","Aphaeresis"],["F","Syncope"],["G","Apocope"],["H","Prothesis"],["I","Epenthesis"],["J","Paragoge"]]
+  },
+  {
+    id:37, text:`The storm hit at 2 p.m. in the afternoon.`,
+    opts:[["A","Epizeuxis"],["B","Symploce"],["C","Synonymia"],["D","Tautology"],["E","Aphaeresis"],["F","Syncope"],["G","Apocope"],["H","Prothesis"],["I","Epenthesis"],["J","Paragoge"]]
+  },
+  {
+    id:38, text:`"Is it not a certain mark and token of intolerable arrogancy and venomous envy... depraving, slandering, defacing..."`,
+    opts:[["A","Epizeuxis"],["B","Isocolon"],["C","Symploce"],["D","Synonymia"],["E","Tautology"],["F","Aphaeresis"],["G","Syncope"],["H","Apocope"],["I","Prothesis"],["J","Epenthesis"],["K","Paragoge"]]
+  },
+  {
+    id:39, text:`cam'ra, fam'ly, fav'rite, mem'ry, veg'table, and butt'ning.`,
+    opts:[["A","Epizeuxis"],["B","Isocolon"],["C","Symploce"],["D","Synonymia"],["E","Tautology"],["F","Aphaeresis"],["G","Syncope"],["H","Apocope"],["I","Prothesis"],["J","Epenthesis"],["K","Paragoge"]]
+  },
+  {
+    id:40, text:`A child might say "buh-lue" instead of "blue" or "su-pas-ghetti" instead of "spaghetti."`,
+    opts:[["A","Epizeuxis"],["B","Isocolon"],["C","Symploce"],["D","Synonymia"],["E","Tautology"],["F","Aphaeresis"],["G","Syncope"],["H","Apocope"],["I","Prothesis"],["J","Epenthesis"],["K","Paragoge"]]
+  }
+];
+
+const SECTIONS = [
+  { label:"Section I", range:[1,10], desc:"Tropes: Accismus to Correctio" },
+  { label:"Section II", range:[11,20], desc:"Schemes: Dehortatio to Zeugma" },
+  { label:"Section III", range:[21,30], desc:"Repetition Schemes" },
+  { label:"Section IV", range:[31,40], desc:"Sound & Word Form Devices" }
+];
+
+// ─── State ────────────────────────────────────────────────────────────────────
+const answered = {};
+let correctCount = 0;
+
+// ─── Sound via Web Audio API ──────────────────────────────────────────────────
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let ctx;
+
+function getCtx() {
+  if (!ctx) ctx = new AudioCtx();
+  return ctx;
+}
+
+function playCorrect() {
+  const ac = getCtx();
+  const osc = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.connect(gain); gain.connect(ac.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(523.25, ac.currentTime);      // C5
+  osc.frequency.setValueAtTime(659.25, ac.currentTime+0.12); // E5
+  osc.frequency.setValueAtTime(783.99, ac.currentTime+0.24); // G5
+  gain.gain.setValueAtTime(0.18, ac.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime+0.55);
+  osc.start(ac.currentTime);
+  osc.stop(ac.currentTime+0.55);
+}
+
+function playWrong() {
+  const ac = getCtx();
+  const osc = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.connect(gain); gain.connect(ac.destination);
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(220, ac.currentTime);
+  osc.frequency.setValueAtTime(180, ac.currentTime+0.1);
+  gain.gain.setValueAtTime(0.12, ac.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime+0.35);
+  osc.start(ac.currentTime);
+  osc.stop(ac.currentTime+0.35);
+}
+
+// ─── Build Quiz ───────────────────────────────────────────────────────────────
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+
+  SECTIONS.forEach(sec => {
+    const hdr = document.createElement('div');
+    hdr.className = 'section-header';
+    hdr.innerHTML = `<h2>${sec.label}</h2><span class="section-desc">${sec.desc}</span>`;
+    container.appendChild(hdr);
+
+    for (let n = sec.range[0]; n <= sec.range[1]; n++) {
+      const q = QUESTIONS[n - 1];
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.id = `q${q.id}`;
+
+      const header = document.createElement('div');
+      header.className = 'question-header';
+      header.innerHTML = `<span class="q-number">${q.id}.</span><span class="q-text">${q.text}</span>`;
+      card.appendChild(header);
+
+      const grid = document.createElement('div');
+      grid.className = 'options-grid';
+
+      q.opts.forEach(([letter, label]) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.dataset.letter = letter;
+        btn.dataset.qid = q.id;
+        btn.innerHTML = `<span class="opt-letter">${letter}.</span>${label}`;
+        btn.addEventListener('dblclick', handleAnswer);
+        grid.appendChild(btn);
+      });
+
+      card.appendChild(grid);
+
+      const expl = document.createElement('div');
+      expl.className = 'explanation';
+      expl.id = `expl${q.id}`;
+      card.appendChild(expl);
+
+      container.appendChild(card);
+    }
+  });
+}
+
+function handleAnswer(e) {
+  const btn = e.currentTarget;
+  const qid = parseInt(btn.dataset.qid);
+  const letter = btn.dataset.letter;
+
+  if (answered[qid]) return;
+  answered[qid] = true;
+
+  const correct = ANSWERS[qid];
+  const card = document.getElementById(`q${qid}`);
+  const allBtns = card.querySelectorAll('.option');
+
+  allBtns.forEach(b => {
+    b.classList.add('disabled');
+    if (b.dataset.letter === correct && b !== btn) {
+      b.classList.add('revealed-correct');
+    }
+  });
+
+  const isCorrect = letter === correct;
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    playCorrect();
+    correctCount++;
+  } else {
+    btn.classList.add('wrong');
+    playWrong();
+  }
+
+  const expl = document.getElementById(`expl${qid}`);
+  expl.innerHTML = EXPLANATIONS[qid];
+  expl.classList.add('show');
+
+  updateScore();
+
+  if (Object.keys(answered).length === QUESTIONS.length) {
+    showResults();
+  }
+}
+
+function updateScore() {
+  const total = Object.keys(answered).length;
+  document.getElementById('score-display').textContent = `${correctCount} / 40`;
+  document.getElementById('progress-fill').style.width = `${(total / 40) * 100}%`;
+}
+
+function showResults() {
+  const banner = document.getElementById('results-banner');
+  banner.style.display = 'block';
+  document.getElementById('final-score').textContent = `${correctCount} / 40`;
+  const pct = Math.round((correctCount / 40) * 100);
+  let msg = '';
+  if (pct >= 90) msg = 'Outstanding! You have a masterful command of literary tropes and schemes.';
+  else if (pct >= 75) msg = 'Well done! A solid grasp of figurative language — just a few terms to revisit.';
+  else if (pct >= 55) msg = 'Good effort! Review the explanations to sharpen your knowledge.';
+  else msg = 'Keep studying! The explanations above will guide you toward mastery.';
+  document.getElementById('final-msg').textContent = msg;
+  banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
